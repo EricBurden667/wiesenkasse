@@ -1,18 +1,15 @@
 #include "crow.h"
 #include <iostream>
 #include <fstream>
-#include <sqlite3.h>
+#include "SQLiteCpp/SQLiteCpp.h"
 
-static int callback(void* data, int argc, char** argv, char** azColName) {
-    int i;
-    fprintf(stderr, "%s: ", (const char*)data);
-
-    for (i = 0; i < argc; i++) {
-        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-    }
-
-    printf("\n");
-    return true;
+static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
+   int i;
+   for(i = 0; i<argc; i++) {
+      printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+   }
+   printf("\n");
+   return 0;
 }
 
 int checkDBTable() {
@@ -32,9 +29,9 @@ int checkDBTable() {
                                     "verkID INT NOT NULL, "
                                     "PRICE DOUBLE NOT NULL);";
     int exit;
-	char* messaggeError;
+	char *messaggeError;
 
-    sqlite3* DB;
+    sqlite3 *DB;
     sqlite3_open("wkdata.db", &DB);
     
     exit = sqlite3_exec(DB, check_verkTable.c_str(), callback, NULL, &messaggeError);
@@ -75,8 +72,8 @@ int checkDBTable() {
 }
 
 int storeData(int verkID, double price) {
-    sqlite3* DB;
-    char* messaggeError;
+    sqlite3 *DB;
+    char *messaggeError;
     int exit;
     sqlite3_open("wkdata.db", &DB);
 
@@ -163,7 +160,7 @@ int main() {
             os << "Transaktion: " << i << '\n';
             os << "verkID:" << verkID << ", ";
             os << "preis:" << price << "\n";
-            // storeData(verkID, price);
+            storeData(verkID, price);
 
         }
         return crow::response{os.str()};
