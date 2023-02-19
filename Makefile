@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-c -Wall
-LDLIBS=-lSQLiteCpp
+LDLIBS=-lSQLiteCpp -lsqlite3
 LDFLAGS=-L/usr/lib/x86_64-linux-gnu/
 
 all: Wiesenkasse

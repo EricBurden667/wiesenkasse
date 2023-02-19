@@ -1,95 +1,92 @@
 #include "crow.h"
 #include <iostream>
 #include <fstream>
-#include "SQLiteCpp/SQLiteCpp.h"
 
-static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
-   int i;
-   for(i = 0; i<argc; i++) {
-      printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-   }
-   printf("\n");
-   return 0;
-}
+#include "SQLiteCpp/SQLiteCpp.h"
+//#include "SQLiteCpp/Database.h"
 
 int checkDBTable() {
-    // check if standard database tables exist and create if not
+    SQLite::Database DB("wkdata.db3", SQLite::OPEN_READWRITE|SQLite::OPEN_CREATE);
 
-    std::string check_verkTable = "SELECT 1 FROM verk;";
-    std::string check_kasseTable = "SELECT 1 FROM kasse;";
-
-    std::string create_verkTable = "CREATE TABLE verk("
+    SQLite::Statement create_verkTable(DB,"CREATE TABLE verk("
                                     "ID INT PRIMARY KEY NOT NULL, "
                                     "NAME TEXT NOT NULL, "
-                                    "DESCRIPTION CHAR(50), "
-                                    "FEES BOOL );";
+                                    "DESCRIPTION CHAR(255), "
+                                    "FEES BOOL)");
 
-    std::string create_kasseTable = "CREATE TABLE kasse("
+    SQLite::Statement create_kasseTable(DB, "CREATE TABLE kasse("
                                     "ID INT PRIMARY KEY NOT NULL, "
                                     "verkID INT NOT NULL, "
-                                    "PRICE DOUBLE NOT NULL);";
-    int exit;
-	char *messaggeError;
-
-    sqlite3 *DB;
-    sqlite3_open("wkdata.db", &DB);
+                                    "PRICE DOUBLE NOT NULL)");
     
-    exit = sqlite3_exec(DB, check_verkTable.c_str(), callback, NULL, &messaggeError);
+    
+    const bool vExists = DB.tableExists("verk");
+    std::cout << "Debug: SQLite table 'verk' exists=" << vExists << "\n";
 
-	if (exit != SQLITE_OK) {
-		std::cerr << "Error Checking verk Table" << std::endl;
-		sqlite3_free(messaggeError);
-        std::cout << "Creating Table verk" << std::endl;
+	if (vExists != true) {
+		std::cerr << "WARN: Did not find table 'verk'" << std::endl;
+        std::cout << "Creating table 'verk'" << std::endl;
 
-        exit = sqlite3_exec(DB, create_verkTable.c_str(), callback, NULL, &messaggeError);
-        if (exit != SQLITE_OK) {
-            std::cerr << "Error Creating verk Table" << std::endl;
-            return false;
+        try
+        {
+            create_verkTable.executeStep();
+        }
+        catch (std::exception& e)
+        {
+            std::cerr << "ERROR creating 'verk' table" << std::endl;
+            std::cout << "exception: " << e.what() << std::endl;
+            return EXIT_FAILURE;
         }
 	}
-	else
-		std::cout << "Table verk Check Successful" << std::endl;
 
-	exit = sqlite3_exec(DB, check_kasseTable.c_str(), callback, NULL, &messaggeError);
+    const bool kExists = DB.tableExists("kasse");
+    std::cout << "Debug: SQLite table 'kasse' exists=" << kExists << "\n";
 
-	if (exit != SQLITE_OK) {
-		std::cerr << "Error Checking kasse Table" << std::endl;
-		sqlite3_free(messaggeError);
-        std::cout << "Creating Table kasse" << std::endl;
-        
-        exit = sqlite3_exec(DB, create_verkTable.c_str(), callback, NULL, &messaggeError);
-        if (exit != SQLITE_OK) {
-            std::cerr << "Error Creating kasse Table" << std::endl;
-            return false;
+	if (kExists != true) {
+		std::cerr << "WARN: Did not find table 'kasse'" << std::endl;
+        std::cout << "Creating table 'kasse'" << std::endl;
+
+        try
+        {
+            create_kasseTable.executeStep();
+        }
+        catch (std::exception& e)
+        {
+            std::cerr << "ERROR creating 'kasse' table" << std::endl;
+            std::cout << "exception: " << e.what() << std::endl;
+            return EXIT_FAILURE;
         }
 	}
-	else
-		std::cout << "Table kasse Check Successful" << std::endl;
-    
-    sqlite3_close(DB);
-	return true;
+
+	//SQLite::Database::Deleter::operator()(*DB);
+    //SQLite::Database::Deleter(*DB);
+    //DB.~Database::Deleter;
+
+    return EXIT_SUCCESS;
 
 }
 
 int storeData(int verkID, double price) {
-    sqlite3 *DB;
-    char *messaggeError;
-    int exit;
-    sqlite3_open("wkdata.db", &DB);
+    SQLite::Database DB("wkdata.db3", SQLite::OPEN_READWRITE);
 
-    std::string storeDataSQL = "INSERT INTO kasse VALUES( "
+    SQLite::Statement storeDataSQL(DB, "INSERT INTO kasse VALUES( "
                                     "verkID, "
-                                    "price);";
+                                    "price)");
 
-    exit = sqlite3_exec(DB, storeDataSQL.c_str(), callback, NULL, &messaggeError);
-
-	if (exit != SQLITE_OK) {
-		std::cerr << "Error saving data" << std::endl;
-		sqlite3_free(messaggeError);
+    try
+    {
+        storeDataSQL.executeStep();
+    }
+    catch (std::exception& e)
+    {
+        std::cerr << "ERROR adding data to table 'kasse'" << std::endl;
+        std::cout << "exception: " << e.what() << std::endl;
+        return EXIT_FAILURE;
     }
 
-    sqlite3_close(DB);
-    return true;
+	//SQLite::Database::Deleter(*DB);
+    //DB.Deleter::operator();
+    return EXIT_SUCCESS;
 }
 
 int main() {
