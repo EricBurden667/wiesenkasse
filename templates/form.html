@@ -53,7 +53,7 @@
       background-color: #c0c00a;
       position: relative;
       height: 120px;
-      background-image: url("img/fb_profil_header.jpg");  
+      background-image: url("/img/fb_profil_header.jpg");  
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -201,29 +201,62 @@
     </style>
     <script>
         function showCart() {
-            alert("Jo, klappt.");
-            <!--
-              <button type="submit" onclick="delCart()" background-color: red>Alles löschen</button>
-              <button type="button" formaction="/data/add" formmethod="post">Fertig</button>
-              -->
+          //warenkorb = "{47: 1, 13: 7}";
+          wtable = document.getElementById("warenkorb").innerHTML;
+          print(wtable);
+          /*
+          <p id="warenkorb"></p>
+          <button type="submit" onclick="delCart()" background-color: red>Alles löschen</button>
+          <button type="button" formaction="/data/add" formmethod="post">Fertig</button>
+          */
         }
+        function submitCart() {
+          const httpRequest = new XMLHttpRequest();
+          function handler() {
+            // Process the server response here.
+            true;
+          }
+
+          httpRequest.onreadystatechange = handler;
+          httpRequest.setRequestHeader(
+            "Content-Type",
+            "application/json"
+          );
+          httpRequest.open("POST", "/data/add", true);
+          httpRequest.send(warenkorb);
+        }
+
         function addArticle() {
-            alert("1+1=3");
+          // Get the values of the input fields
+          let verkID = document.getElementById("verkID").value;
+          let betrag = document.getElementById("betrag").value;
+          
+          // Not a Number validation
+          let text;
+          if (isNaN(parseInt(verkID)) || isNaN(parseFloat(betrag))) {
+            print "Input not valid";
+          } else {
+            warenkorb += "{verkID: betrag}";
+          }
+          document.getElementById("warenkorb").innerHTML = warenkorb;
+        }
+        function delCart() {
+          true;
         }
     </script>
   </head>
   <body>
     <div class="testbox">
+    <div class="banner">
+      <h1>Kassenformular</h1>
+    </div>
     <form>
-      <div class="banner">
-        <h1>Kassenformular</h1>
-      </div>
       <br/>
       <fieldset>
         <legend>Verkaufsdaten</legend>
         <div class="colums">
           <div class="item">
-            <label for="verkID">Verk&auml;uferID<span>*</span></label>
+            <label for="verkID">Verk&auml;uferID</label>
             <input id="verkID" type="int" name="verkID" />
           </div>
           <div class="item">
@@ -239,5 +272,10 @@
       </div>
     </form>
     </div>
+
+    <p id="warenkorb"></p>
+    <button type="submit" onclick="delCart()" background-color: red>Alles l&ooml;schen</button>
+    <button type="button" formaction="/data/add" formmethod="post">Fertig</button>
+    
   </body>
 </html>
