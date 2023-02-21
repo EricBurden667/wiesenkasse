@@ -10,14 +10,14 @@ int checkDBTable() {
 
     SQLite::Statement create_verkTable(DB,"CREATE TABLE verk("
                                     "ID INT PRIMARY KEY NOT NULL, "
-                                    "NAME TEXT NOT NULL, "
-                                    "DESCRIPTION CHAR(255), "
-                                    "FEES BOOL)");
+                                    "name TEXT NOT NULL, "
+                                    "description CHAR(255), "
+                                    "fees BOOL)");
 
     SQLite::Statement create_kasseTable(DB, "CREATE TABLE kasse("
                                     "ID INT PRIMARY KEY NOT NULL, "
                                     "verkID INT NOT NULL, "
-                                    "PRICE DOUBLE NOT NULL)");
+                                    "price DOUBLE NOT NULL)");
     
     
     const bool vExists = DB.tableExists("verk");
@@ -89,6 +89,42 @@ int storeData(int verkID, double price) {
     return EXIT_SUCCESS;
 }
 
+int printAllData() {
+    try
+    {
+        std::string fullData;
+        //auto fullData;
+
+        // TODO: Open DB with ".mode json" to use native JSON
+
+        SQLite::Database DB("wkdata.db3");
+        SQLite::Statement query(DB, "SELECT verkID, price FROM kasse GROUP BY verkID");
+
+        while (query.executeStep())
+        {
+            const int verkID    = query.getColumn(0);
+            const double price  = query.getColumn(1);
+
+            /*
+            fullData.append(verkID);
+            fullData.append(", ");
+            fullData.append(price);
+            fullData.append("\n");
+            fullData += std::to_string(verkID) + ", " + std::to_string(price) + "\n";
+            */
+           std::cout << std::to_string(verkID) << ", " << std::to_string(price) << std::endl;
+        }
+        
+        return EXIT_SUCCESS;
+    }
+    catch (std::exception& e)
+    {
+        std::cerr << "ERROR getting all data from table 'kasse'" << std::endl;
+        std::cout << "exception: " << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+}
+
 int main() {
     crow::SimpleApp app;
 
@@ -112,6 +148,8 @@ int main() {
     });
 
     CROW_ROUTE(app,"/data/print")([](){
+        std::ostringstream os;
+        /*
         // define static for DEBUG
         crow::json::wvalue fullData({
             {"id", 0},
@@ -120,18 +158,12 @@ int main() {
             {"cash", 42.},
             {"tax", true},
             {"cashout", 38.}
-        });
-        
-        // read from file
-        /*
-        std::string path = "./";
-        std::string file_name = "fdata";
-
-        std::ifstream file(path + "/" + file_name + ".json");
-        file >> fullData;
+        });      
+        return fullData;
         */
 
-        return fullData;
+       printAllData();
+       return crow::response{os.str()};
     });
 
     CROW_ROUTE(app, "/data/add").methods(crow::HTTPMethod::POST)
@@ -152,13 +184,20 @@ int main() {
         //v1: for (const auto& countVal : itemsCount)
         for (int i = 0; i < itemsCount; i++)
         {
-            int verkID = itemsObj[i]["verkID"].i();
-            double price = itemsObj[i]["price"].d();
-            os << "Transaktion: " << i << '\n';
-            os << "verkID:" << verkID << ", ";
-            os << "preis:" << price << "\n";
-            storeData(verkID, price);
-
+            try
+            {
+                int verkID = itemsObj[i]["verkID"].i();
+                double price = itemsObj[i]["price"].d();
+                os << "Transaktion: " << i << '\n';
+                os << "verkID:" << verkID << ", ";
+                os << "preis:" << price << "\n";
+                storeData(verkID, price);
+            }
+            catch (std::exception& e)
+            {
+                std::cerr << "ERROR transferring data to DB" << std::endl;
+                std::cout << "exception: " << e.what() << std::endl;
+            }
         }
         return crow::response{os.str()};
         
