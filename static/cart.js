@@ -1,7 +1,7 @@
 function showCart() {
     //warenkorb = "{47: 1, 13: 7}";
     wtable = document.getElementById("warenkorb").innerHTML;
-    print(wtable);
+    document.write(wtable);
     /*
     <p id="warenkorb"></p>
     <button type="submit" onclick="delCart()" background-color: red>Alles löschen</button>
@@ -33,9 +33,9 @@ function addArticle() {
     // Not a Number validation
     let text;
     if (isNaN(parseInt(verkID)) || isNaN(parseFloat(betrag))) {
-      print "Input not valid";
+      postMessage("Input not valid");
     } else {
-      warenkorb += "{verkID: betrag}";
+      warenkorb += '{"verkID": verkID, "betrag": betrag}';
     }
     document.getElementById("warenkorb").innerHTML = warenkorb;
 }

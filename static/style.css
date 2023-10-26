@@ -48,7 +48,7 @@ html, body {
     background-color: #c0c00a;
     position: relative;
     height: 120px;
-    background-image: url("/img/fb_profil_header.jpg");  
+    background-image: url("/static/img/fb_profil_header.jpg");  
     background-size: cover;
     display: flex;
     justify-content: center;
@@ -102,7 +102,9 @@ html, body {
     }
     .week {
     display:flex;
-    justfiy-content:space-between;
+    /* Invalid:
+        justfiy-content:space-between;
+    */
     }
     .colums {
     display:flex;
