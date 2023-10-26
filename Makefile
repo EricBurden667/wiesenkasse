@@ -12,6 +12,6 @@ api.o: api.cpp
 	$(CC) $(CFLAGS) api.cpp
 
 clean:
-	rm -rf *o Wiesenkasse
+	rm -rf *.o Wiesenkasse
 
 rebuild: clean all

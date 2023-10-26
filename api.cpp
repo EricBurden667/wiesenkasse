@@ -8,27 +8,20 @@
 int checkDBTable() {
     SQLite::Database DB("wkdata.db3", SQLite::OPEN_READWRITE|SQLite::OPEN_CREATE);
 
-    SQLite::Statement create_verkTable(DB,"CREATE TABLE verk("
-                                    "ID INT PRIMARY KEY NOT NULL, "
-                                    "name TEXT NOT NULL, "
-                                    "description CHAR(255), "
-                                    "fees BOOL)");
-
-    SQLite::Statement create_kasseTable(DB, "CREATE TABLE kasse("
-                                    "ID INT PRIMARY KEY NOT NULL, "
-                                    "verkID INT NOT NULL, "
-                                    "price DOUBLE NOT NULL)");
-    
-    
     const bool vExists = DB.tableExists("verk");
     std::cout << "Debug: SQLite table 'verk' exists=" << vExists << "\n";
 
-	if (vExists != true) {
+	if (!vExists) {
 		std::cerr << "WARN: Did not find table 'verk'" << std::endl;
         std::cout << "Creating table 'verk'" << std::endl;
 
         try
         {
+            SQLite::Statement create_verkTable(DB,"CREATE TABLE verk("
+                                            "ID INT PRIMARY KEY NOT NULL, "
+                                            "name TEXT NOT NULL, "
+                                            "description CHAR(255), "
+                                            "fees BOOL)");
             create_verkTable.executeStep();
         }
         catch (std::exception& e)
@@ -42,12 +35,17 @@ int checkDBTable() {
     const bool kExists = DB.tableExists("kasse");
     std::cout << "Debug: SQLite table 'kasse' exists=" << kExists << "\n";
 
-	if (kExists != true) {
+	if (!kExists) {
 		std::cerr << "WARN: Did not find table 'kasse'" << std::endl;
         std::cout << "Creating table 'kasse'" << std::endl;
 
         try
         {
+            SQLite::Statement create_kasseTable(DB, "CREATE TABLE kasse("
+							"ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+							"verkID INT NOT NULL, "
+							"price DOUBLE NOT NULL)");
+
             create_kasseTable.executeStep();
         }
         catch (std::exception& e)
@@ -69,12 +67,12 @@ int checkDBTable() {
 int storeData(int verkID, double price) {
     SQLite::Database DB("wkdata.db3", SQLite::OPEN_READWRITE);
 
-    SQLite::Statement storeDataSQL(DB, "INSERT INTO kasse VALUES( "
-                                    "verkID, "
-                                    "price)");
-
     try
     {
+        SQLite::Statement storeDataSQL(DB, "INSERT INTO kasse (verkID, price) "
+        									"VALUES(?, ?)");
+        storeDataSQL.bind(1, verkID);
+        storeDataSQL.bind(2, price);
         storeDataSQL.executeStep();
     }
     catch (std::exception& e)
