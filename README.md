@@ -25,7 +25,6 @@ Sieht seltsam aus, aber dieser Service ist so aufgebaut, dass Crow die APIs bere
 
 ## Tabellen
 Es gibt derzeit zwei Tabellen: 'verk' und 'kasse'
-!BUG: Aktuell sollte die Datenbankdatei leer oder nicht vorhanden sein, das ist noch ein Bug!
 
 Die Tabelle 'verk' wird idealerweise im Vorfeld gefüllt:
     ID INT PRIMARY KEY NOT NULL,
@@ -46,3 +45,6 @@ Die Tabelle 'kasse' wird dann von allen durch das HTML-Formular (<host>/form) ge
   * Löschen des Warenkorbes im Client
   * Anpassen von printData() -> verkID, name, description, fees
   * Darstellung von printAllData() -> .mode?, JavaScript
+
+# Fixed
+  * Datenbank wird jetzt korrekt beim Start geprüft und ggfs erstellt (Danke für den Patch!)
