@@ -1,3 +1,6 @@
+// warenkorb array declaration
+const warenkorb = [];
+
 function showCart() {
     //warenkorb = "{47: 1, 13: 7}";
     wtable = document.getElementById("warenkorb").innerHTML;
@@ -30,14 +33,21 @@ function addArticle() {
     let verkID = document.getElementById("verkID").value;
     let betrag = document.getElementById("betrag").value;
     
+    console.log("DEBUG: Zuweisung: verkID=" + verkID + ", betrag=" + betrag);
+
     // Not a Number validation
     let text;
     if (isNaN(parseInt(verkID)) || isNaN(parseFloat(betrag))) {
       postMessage("Input not valid");
     } else {
-      warenkorb += '{"verkID": verkID, "betrag": betrag}';
+      //warenkorb += '{"verkID": verkID, "betrag": betrag}';
+      warenkorb.push("{verkID:" + verkID + ",betrag:" + betrag +"}");
     }
+    console.log("DEBUG: Warenkorb Items: verkID: " + verkID + ", betrag: " + betrag);
+    console.log("DEBUG: Warenkorb: " + warenkorb);
+
     document.getElementById("warenkorb").innerHTML = warenkorb;
+
 }
 
 function delCart() {

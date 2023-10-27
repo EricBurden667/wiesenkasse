@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Kassenformular</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="/static/style.css" type="text/css">
     <script src="/static/cart.js"></script>
@@ -25,15 +26,26 @@
       <br/>
 
       <div class="btn-block">
-        <button type="submit" onclick="addArticle()">Weiter</button>
+        <button type="submit" onclick="addArticle(verkID, betrag)">Weiter</button>
         <button type="button" onclick="showCart()">Summe</button>
       </div>
     </form>
     </div>
 
-    <p id="warenkorb"></p>
-    <button type="submit" onclick="delCart()" background-color: red>Alles l&ouml;schen</button>
-    <button type="button" formaction="/data/add" formmethod="post">Fertig</button>
+    <p id="warenkorb">
+      <script>
+        let text = "<ul>";
+        warenkorb.forEach(addListItem);
+        text += "</ul>";
+
+        function addListItem(value) {
+          text += "<li>" + value + "</li>";
+        }
+      </script>
+      <button type="submit" onclick="delCart()" background-color: red>Alles l&ouml;schen</button>
+      <button type="button" formaction="/data/add" formmethod="post">Fertig</button>
+    </p>
+
     
   </body>
 </html>
