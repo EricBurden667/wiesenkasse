@@ -26,16 +26,22 @@ Sieht seltsam aus, aber dieser Service ist so aufgebaut, dass Crow die APIs bere
 ## Tabellen
 Es gibt derzeit zwei Tabellen: 'verk' und 'kasse'
 
-Die Tabelle 'verk' wird idealerweise im Vorfeld gefüllt:
+Die Tabelle 'verk' enthält die Verkäufernummer, die sich auch auf den zu verkaufenden Artikeln befindet, den dazu gehörenden Namen, eine optionale Beschreibung und die Angabe, wieviel Prozent der Förderverein vom Umsatz erhält (zur Zeit sind 10% der normale Satz).
+
+```sql
     ID INT PRIMARY KEY NOT NULL,
     name TEXT NOT NULL,
     description CHAR(255),
-    fees BOOL
+    fees INT DEFAULT 10
+```
 
 Die Tabelle 'kasse' wird dann von allen durch das HTML-Formular (<host>/form) gefüllt, zur Zeit leider noch nicht via Transaktion:
+
+```sql
     ID INT PRIMARY KEY NOT NULL,
     verkID INT NOT NULL,
     price DOUBLE NOT NULL
+```
 
 # TODO
   * Anpassen von storeData() -> Transaktionen!

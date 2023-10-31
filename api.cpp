@@ -18,10 +18,10 @@ int checkDBTable() {
         try
         {
             SQLite::Statement create_verkTable(DB,"CREATE TABLE verk("
-                                            "ID INT PRIMARY KEY NOT NULL, "
+                                            "ID(4) INT PRIMARY KEY NOT NULL, "
                                             "name TEXT NOT NULL, "
                                             "description CHAR(255), "
-                                            "fees BOOL)");
+                                            "fees INT(2) DEFAULT 10)");
             create_verkTable.executeStep();
         }
         catch (std::exception& e)
@@ -43,7 +43,7 @@ int checkDBTable() {
         {
             SQLite::Statement create_kasseTable(DB, "CREATE TABLE kasse("
 							"ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-							"verkID INT NOT NULL, "
+							"verkID INT(4) NOT NULL, "
 							"price DOUBLE NOT NULL)");
 
             create_kasseTable.executeStep();
