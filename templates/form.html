@@ -33,6 +33,7 @@
     </div>
 
     <p id="warenkorb">
+      <h2>Warenkorb Skript</h2>
       <script>
         let text = "<ul>";
         warenkorb.forEach(addListItem);
@@ -42,6 +43,8 @@
           text += "<li>" + value + "</li>";
         }
       </script>
+      <h2>Warenkorb Liste</h2>
+      <ul id="liste"></ul>
       <button type="submit" onclick="delCart()" background-color: red>Alles l&ouml;schen</button>
       <button type="button" formaction="/data/add" formmethod="post">Fertig</button>
     </p>
