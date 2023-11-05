@@ -18,7 +18,7 @@ int checkDBTable() {
         try
         {
             SQLite::Statement create_verkTable(DB,"CREATE TABLE verk("
-                                            "ID(4) INT PRIMARY KEY NOT NULL, "
+                                            "ID INTEGER PRIMARY KEY NOT NULL, "
                                             "name TEXT NOT NULL, "
                                             "description CHAR(255), "
                                             "fees INT(2) DEFAULT 10)");
@@ -43,7 +43,7 @@ int checkDBTable() {
         {
             SQLite::Statement create_kasseTable(DB, "CREATE TABLE kasse("
 							"ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-							"verkID INT(4) NOT NULL, "
+							"verkID INTEGER NOT NULL, "
 							"price DOUBLE NOT NULL)");
 
             create_kasseTable.executeStep();

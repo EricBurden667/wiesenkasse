@@ -1,54 +1,45 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Kassenformular</title>
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" href="/static/style.css" type="text/css">
-    <script src="/static/cart.js"></script>
-  </head>
-  <body>
-    <div class="testbox">
-    <form>
-      <br/>
-      <fieldset>
-        <legend>Verkaufsdaten</legend>
-        <div class="colums">
-          <div class="item">
-            <label for="verkID">Verk&auml;uferID</label>
-            <input id="verkID" type="int" name="verkID" />
-          </div>
-          <div class="item">
-            <label for="betrag">Betrag</label>
-            <input id="betrag" type="float" name="betrag" />
-          </div>
-      </fieldset>
-      <br/>
+    <head>
+        <title>Kassenformular</title>
+        <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" href="../static/style.css" type="text/css">
+        <script src="../static/cart.js"></script>
+    </head>
+    <body>
+        <div class="testbox">
+            <form>
+                <br/>
+                <fieldset>
+                    <legend>Verkaufsdaten</legend>
+                    <div class="colums">
+                        <div class="item">
+                            <label for="seller">Verk&auml;uferID</label>
+                            <input id="seller" type="number" name="seller" />
+                        </div>
+                        <div class="item">
+                            <label for="amount">Betrag</label>
+                            <input id="amount" type="text" pattern="\d+\.\d{2}" name="amount" />
+                        </div>
+                    </div>
+                </fieldset>
+                <br/>
 
-      <div class="btn-block">
-        <button type="submit" onclick="addArticle(verkID, betrag)">Weiter</button>
-        <button type="button" onclick="showCart()">Summe</button>
-      </div>
-    </form>
-    </div>
+                <div class="btn-block">
+                    <button id="continue" type="submit">Weiter</button>
+                    <button type="button" onclick="showCart()">Summe</button>
+                </div>
+            </form>
+        </div>
 
-    <p id="warenkorb">
-      <h2>Warenkorb Skript</h2>
-      <script>
-        let text = "<ul>";
-        warenkorb.forEach(addListItem);
-        text += "</ul>";
-
-        function addListItem(value) {
-          text += "<li>" + value + "</li>";
-        }
-      </script>
-      <h2>Warenkorb Liste</h2>
-      <ul id="liste"></ul>
-      <button type="submit" onclick="delCart()" background-color: red>Alles l&ouml;schen</button>
-      <button type="button" formaction="/data/add" formmethod="post">Fertig</button>
-    </p>
-
-    
-  </body>
+        <div id="warenkorb">
+            <h2>Warenkorb Liste</h2>
+            <ul id="cartlist">
+                
+            </ul>
+            <button id="deleteAll" type="submit" style="background-color: red">Alles l&ouml;schen</button>
+            <button id="submitAll" type="button">Fertig</button>
+        </div>
+    </body>
 </html>
