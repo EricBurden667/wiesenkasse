@@ -16,7 +16,27 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("amount").value = "";
 
             let entry = document.createElement("li");
-            entry.innerText = "Verkäufer " + seller + " Betrag " + amount + "€";
+            entry.setAttribute("data-seller", seller);
+            entry.setAttribute("data-amount", amount);
+
+            let text = document.createElement("span");
+            text.innerText = "Verkäufer " + seller + " Betrag " + amount + "€ ";
+
+            let deleteLink  = document.createElement("a");
+
+            deleteLink.onclick=(event) => {
+                let myElement = event.srcElement.closest("li");
+                let mySeller = myElement.getAttribute("data-seller");
+                let myAmount = myElement.getAttribute("data-amount");
+
+                removeFromCart(mySeller, myAmount);
+                myElement.remove();
+            };
+
+            deleteLink.innerHTML = "<strong>Entfernen</strong>";
+
+            text.append(deleteLink);
+            entry.appendChild(text);
 
             document.getElementById("cartlist").appendChild(entry);
         }
@@ -42,9 +62,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify(body)
             };
 
-            fetch("/data/add", config);
-            alert("Daten wurden übermittelt.");
-            clearCart();
+            (async () => {
+                let response = await fetch("/data/add", config);
+                alert("Daten wurden übermittelt.");
+                clearCart();
+            })();
         } catch (error) {
             alert("Es ist ein Fehler aufgetreten!");
         }
@@ -60,5 +82,22 @@ function clearCart() {
 
     while (list.hasChildNodes()) {
         list.removeChild(list.firstChild);
+    }
+}
+
+function removeFromCart(seller, amount) {
+    index = -1;
+
+    for (i = 0; i < cart.length; i++) {
+        if (cart[i].verkID === parseInt(seller) &&
+                cart[i].price === parseFloat(amount)) {
+
+            index  = i;
+            break;
+        }
+    }
+
+    if (index >= 0) {
+        cart.splice(index, 1);
     }
 }
