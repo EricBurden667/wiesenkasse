@@ -35,7 +35,7 @@ Die Tabelle 'verk' enthält die Verkäufernummer, die sich auch auf den zu verka
     fees INT DEFAULT 10
 ```
 
-Die Tabelle 'kasse' wird dann von allen durch das HTML-Formular (<host>/form) gefüllt, zur Zeit leider noch nicht via Transaktion:
+Die Tabelle 'kasse' wird dann von allen durch das HTML-Formular (<host>/form) gefüllt:
 
 ```sql
     ID INT PRIMARY KEY NOT NULL,
@@ -44,13 +44,9 @@ Die Tabelle 'kasse' wird dann von allen durch das HTML-Formular (<host>/form) ge
 ```
 
 # TODO
-  * Anpassen von storeData() -> Transaktionen!
+  * Anpassen von storeData() -> Transaktionen und Feedback im Fehlerfall
   * Anzeige des Warenkorbes im Client als Tabelle
-  * Löschen von einzelnen Artikeln im Client
-  * Absenden des Warenkorbes im Client
-  * Löschen des Warenkorbes im Client
   * Anpassen von printData() -> verkID, name, description, fees
   * Darstellung von printAllData() -> .mode?, JavaScript
-
-# Fixed
-  * Datenbank wird jetzt korrekt beim Start geprüft und ggfs erstellt (Danke für den Patch!)
+  * UI -> Besseres Design und Fokus der Form immer auf verkID
+  * verkID als foreign key
