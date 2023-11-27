@@ -39,6 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
             entry.appendChild(text);
 
             document.getElementById("cartlist").appendChild(entry);
+
+            calculateTotalAmount();
         }
 
         e.preventDefault();
@@ -83,6 +85,8 @@ function clearCart() {
     while (list.hasChildNodes()) {
         list.removeChild(list.firstChild);
     }
+
+    calculateTotalAmount();
 }
 
 function removeFromCart(seller, amount) {
@@ -99,5 +103,18 @@ function removeFromCart(seller, amount) {
 
     if (index >= 0) {
         cart.splice(index, 1);
+        calculateTotalAmount();
     }
+}
+
+function calculateTotalAmount() {
+    let i = 0;
+    let sum = 0;
+
+    while (i < cart.length) {
+        sum += cart[i].price;
+        i++;
+    }
+
+    document.getElementById("totalAmount").value = sum;
 }

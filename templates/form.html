@@ -28,7 +28,6 @@
 
                 <div class="btn-block">
                     <button id="continue" type="submit">Weiter</button>
-                    <button type="button" onclick="showCart()">Summe</button>
                 </div>
             </form>
         </div>
@@ -38,6 +37,10 @@
             <ul id="cartlist">
                 
             </ul>
+            <div>
+                <label for="totalAmount">Gesamtsumme: </label>
+                <input type="text" id="totalAmount" value="" disabled>
+            </div>
             <button id="deleteAll" type="submit" style="background-color: red">Alles l&ouml;schen</button>
             <button id="submitAll" type="button">Fertig</button>
         </div>
