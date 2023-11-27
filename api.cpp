@@ -56,10 +56,6 @@ int checkDBTable() {
         }
 	}
 
-	//SQLite::Database::Deleter::operator()(*DB);
-    //SQLite::Database::Deleter(*DB);
-    //DB.~Database::Deleter;
-
     return EXIT_SUCCESS;
 
 }
@@ -82,8 +78,6 @@ int storeData(int verkID, double price) {
         return EXIT_FAILURE;
     }
 
-	//SQLite::Database::Deleter(*DB);
-    //DB.Deleter::operator();
     return EXIT_SUCCESS;
 }
 
@@ -96,7 +90,7 @@ int printAllData() {
         // TODO: Open DB with ".mode json" to use native JSON
 
         SQLite::Database DB("wkdata.db3");
-        SQLite::Statement query(DB, "SELECT verkID, price FROM kasse GROUP BY verkID");
+        SQLite::Statement query(DB, "SELECT verkID, sum(price) AS Umsatz FROM kasse GROUP BY verkID");
 
         while (query.executeStep())
         {
