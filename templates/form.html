@@ -33,10 +33,22 @@
         </div>
 
         <div id="warenkorb">
-            <h2>Warenkorb Liste</h2>
+            <h2>Warenkorb</h2>
+            <table id="cartTable" class="table">
+                <thead>
+                  <tr>
+                    <th>VerkID</th>
+                    <th>Preis</th>
+                    <th>...</th>
+                  </tr>
+                </thead>
+                <tbody id="cartTableBody"></tbody>
+            </table>
+            <!-- 
             <ul id="cartlist">
                 
             </ul>
+            -->
             <div>
                 <label for="totalAmount">Gesamtsumme: </label>
                 <input type="text" id="totalAmount" value="" disabled>

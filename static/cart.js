@@ -15,17 +15,22 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("seller").value = "";
             document.getElementById("amount").value = "";
 
-            let entry = document.createElement("li");
-            entry.setAttribute("data-seller", seller);
-            entry.setAttribute("data-amount", amount);
+            let table = document.getElementById("cartTableBody");           
+            let row = table.insertRow();
+            row.setAttribute("data-seller", seller);
+            row.setAttribute("data-amount", amount);
 
-            let text = document.createElement("span");
-            text.innerText = "Verkäufer " + seller + " Betrag " + amount + "€ ";
+            let sellerCell = row.insertCell(0);
+            sellerCell.innerHTML = item.verkID;
+            
+            let amountCell = row.insertCell(1);
+            amountCell.innerHTML = item.price;
 
-            let deleteLink  = document.createElement("a");
+            let deleteLink = row.insertCell(2);
+            deleteLink.innerHTML  = document.createElement("a");
 
             deleteLink.onclick=(event) => {
-                let myElement = event.srcElement.closest("li");
+                let myElement = event.srcElement.closest("tr");
                 let mySeller = myElement.getAttribute("data-seller");
                 let myAmount = myElement.getAttribute("data-amount");
 
@@ -34,11 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
             };
 
             deleteLink.innerHTML = "<strong>Entfernen</strong>";
-
-            text.append(deleteLink);
-            entry.appendChild(text);
-
-            document.getElementById("cartlist").appendChild(entry);
 
             calculateTotalAmount();
         }
@@ -80,10 +80,10 @@ document.addEventListener("DOMContentLoaded", () => {
 function clearCart() {
     cart = [];
 
-    let list = document.getElementById("cartlist");
+    let tableBody = document.getElementById("cartTableBody");
 
-    while (list.hasChildNodes()) {
-        list.removeChild(list.firstChild);
+    while (tableBody.hasChildNodes()) {
+        tableBody.removeChild(tableBody.firstChild);
     }
 
     calculateTotalAmount();
